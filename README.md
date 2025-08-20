@@ -35,20 +35,20 @@ Using predictive modeling techniques, the goal was to segment potential customer
 ---
 
 ## Skills Demonstrated  
-- Data Cleaning & Preprocessing  
-- Feature Engineering  
-- Exploratory Data Analysis (EDA)  
-- Predictive Modeling (Classification with XGBoost & Random Forest)  
-- Model Evaluation (Accuracy, F1-Score, Quantile Analysis)  
-- Customer Segmentation using Purchase Quantiles  
-- Data Visualization & Business Reporting  
+- Data Cleaning & Preprocessing.  
+- Feature Engineering.  
+- Exploratory Data Analysis (EDA).  
+- Predictive Modeling (Classification with XGBoost & Random Forest.  
+- Model Evaluation (Accuracy, F1-Score, Quantile Analysis).  
+- Customer Segmentation using Purchase Quantiles.  
+- Data Visualization & Business Reporting.  
 
 ---
 
 ## Tools Used  
-- **Excel** → for initial raw files and inspection  
-- **VS Code** → development environment  
-- **Python** → data analysis, feature engineering, modeling, and evaluation  
+- **Excel** → for initial raw files and inspection.  
+- **VS Code** → development environment.  
+- **Python** → data analysis, feature engineering, modeling, and evaluation.  
 
 ---
 
@@ -139,7 +139,7 @@ These engineered features were included to improve predictive accuracy and bette
 - **Feature Set:** Included demographic, behavioral, and engineered features (e.g., tenure_squared, log_property_valuation, purchase_per_year, high_value_car_owner).  
 - **Hyperparameter Tuning:** Applied Grid search to optimize model depth, learning rate, and estimators.
 - **Model Training:** The engineered dataset was fitted into XGBoost for multi-class classification.
-- - **Prediction on Validation Set:** The trained model was tested against the held-out validation set.  
+  - **Prediction on Validation Set:** The trained model was tested against the held-out validation set.  
 - **Evaluation:** Performance was assessed using:  
   - **Confusion Matrix** – to visualize misclassifications across quartile segments.  
   - **Classification Report** – providing precision, recall, and F1-score for each class.
@@ -244,9 +244,36 @@ plt.show()
 ---
 
 
-## 📊 Model Evaluation  
-- XGBoost outperformed Random Forest with higher accuracy and F1-score.  
-- Quantile cutoff comparison showed **close alignment**:  
+## Predictions on New Customers
+```python
+# Predict
+predictions = best_xgb.predict(new_customers_clean)
+probs = best_xgb.predict_proba(new_customers_clean)
+
+
+# Mapping from numeric class to segment labels
+segment_map = {0: "High Value", 1: "Low Value", 2: "Medium Value"}
+
+new_customers_clean["Sales_Segment"] = [segment_map[p] for p in predictions]
+
+
+# Attach the highest probability score for reference
+new_customers_clean["Max_Prob"] = probs.max(axis=1)
+
+# Concatenate with original df
+final_customers = pd.concat(
+    [new_customers.reset_index(drop=True), 
+    new_customers_clean[['Sales_Segment', 'Max_Prob']]], axis= 1
+)
+
+# Save to Excel
+output_path = "NewCustomerList_with_salessegments.xlsx"
+final_customers.to_excel(output_path, index=False)
+
+print("✅ Predictions with Sales_Segment saved to", output_path)
+```
+
+## Model Evaluation 
 
 | Quantile         | Training Data | New Customers |
 |------------------|---------------|---------------|
@@ -254,26 +281,41 @@ plt.show()
 | 0.66 Quantile    | 66.0          | 64.0          |
 | Max              | 99.0          | 99.0          |
 
-🔎 Interpretation: The predicted new customer purchase segments closely match the training distribution, suggesting the model generalizes well.  
+
+Model evaluation was conducted using a **Quantile Cutoff Comparison**, where predicted customer segments were compared with actual purchase quartiles. This ensured that the model’s classifications aligned with real purchase behavior.
+
+**Key Insights:**
+
+* The model successfully matched predicted **High Value** customers with the top spending quartile.
+* **Medium Value** predictions closely aligned with middle purchase quartiles, showing consistency.
+* **Low Value** predictions fell into the lowest quartile as expected.
+
+**Overall Result:**
+The quantile comparison confirmed that the model’s segmentation strongly reflects real-world spending behavior, giving confidence in the predictions made on new customers.
+
+**Interpretation:** The predicted new customer purchase segments closely match the training distribution, suggesting the model generalizes well.  
 
 ---
 
-## 🔑 Key Findings  
-- High-value customers in the new dataset mirror the purchase behavior of historical customers.  
-- The quartile-based segmentation holds steady across both datasets.  
-- Demographics (age, job, location) contribute meaningfully to customer value prediction.  
+## Key Findings
+
+The model segmented the **1,000 new customers** into three value groups:
+
+* **Medium Value:** 366 customers.
+* **High Value:** 328 customers.
+* **Low Value:** 306 customers.
+
+These results show that the largest portion of customers falls into the **Medium Value** segment, followed closely by **High Value** and **Low Value** groups, with all three segments relatively balanced in distribution.
+
+---
+## Conclusion  
+The predictive modeling successfully segmented the new customer list in line with historical patterns. This provides Sprocket Central Pty Ltd with a reliable **customer targeting framework** to maximize ROI from marketing and sales campaigns.  
 
 ---
 
-## 💡 Recommendations  
+## Recommendations  
 - **Prioritize High-Value Customers**: Focus marketing and premium offers here.  
 - **Engage Medium-Value Customers**: Target them with promotions to move them into the high-value segment.  
 - **Optimize Resources for Low-Value Customers**: Maintain engagement but with minimal spend.  
-
----
-
-## ✅ Conclusion  
-The predictive modeling successfully segmented the new customer list in line with historical patterns.  
-This provides Sprocket Central Pty Ltd with a reliable **customer targeting framework** to maximize ROI from marketing and sales campaigns.  
 
 ---
