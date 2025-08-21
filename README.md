@@ -335,16 +335,36 @@ The quantile comparison confirmed that the model’s segmentation strongly refle
 
 ## Key Findings
 
-The model segmented the **1,000 new customers** into three value groups:
+- The model segmented the **1,000 new customers** into three value groups:
 
-* **Medium Value: 366** customers.
-* **High Value: 328** customers.
-* **Low Value: 306** customers.
+  * **Medium Value: 366** customers.
+  * **High Value: 328** customers.
+  * **Low Value: 306** customers.
 
 <img width="540" height="468" alt="image" src="https://github.com/user-attachments/assets/1e4d390d-5eba-4239-9a34-c4af59eea3f7" />
 
 
 These results show that the largest portion of customers falls into the **Medium Value** segment, followed closely by **High Value** and **Low Value** groups, with all three segments relatively balanced in distribution.
+
+
+- **Age Group:** High-value customers are concentrated in the **43–52** and **53–62** age ranges.
+
+<img width="532" height="468" alt="image" src="https://github.com/user-attachments/assets/33921a72-c3d8-4b0b-9a2d-c33456009ad6" />
+
+- **Location:** Majority of high-value customers are based in **New South Wales (NSW)**.
+  
+  <img width="540" height="468" alt="image" src="https://github.com/user-attachments/assets/af87cca9-4989-43f0-844f-ac28c2d925c2" />
+
+- **Wealth Segment:** Surprisingly, the **Mass Customer** wealth segment contributes the most to high-value purchases.
+
+<img width="571" height="453" alt="image" src="https://github.com/user-attachments/assets/3b4b4f80-7230-41d1-8c65-7c079ee25034" />
+
+
+These insights suggest that customer value is **not always tied to higher wealth brackets**. Instead, affordability and practicality drive purchases among middle-aged customers in NSW.
+
+
+
+
 
 ---
 ## Conclusion  
@@ -353,8 +373,11 @@ The predictive modeling successfully segmented the new customer list in line wit
 ---
 
 ## Recommendations  
-- **Prioritize High-Value Customers**: Focus marketing and premium offers here.  
-- **Engage Medium-Value Customers**: Target them with promotions to move them into the high-value segment.  
-- **Optimize Resources for Low-Value Customers**: Maintain engagement but with minimal spend.  
+1. **Target Age Groups 43–62** – Develop campaigns that resonate with mid-career and pre-retirement individuals.  
+2. **Focus on New South Wales** – Prioritize budget allocation and promotions in NSW.  
+3. **Emphasize the Mass Customer Segment** – Position products as affordable and reliable, appealing to the needs of mass-market buyers.  
+4. **Strategic Action** – Build customer personas for this demographic and tailor communication strategies accordingly.  
 
 ---
+### Business Impact
+By focusing on the age, location, and wealth segment profiles that correlate with high-value customers, Sprocket Central can maximize ROI from the 1,000 new customer prospects.
