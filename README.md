@@ -1,10 +1,11 @@
 # Customer Segmentation & Predictive Modeling – Sprocket Central Pty Ltd  
 
-## Introduction  
-This project is part of the KPMG Virtual Internship series of projects I have worked on.  
-While the earlier [**Project Sprocket Central Data Cleaning**](https://github.com/Susan-hue43/-Sprocket-Data-Cleaning-Project.git) focused on cleaning and preparing the data, this one centers on **predictive modeling and customer segmentation**.  
+## Introduction
+As part of the **KPMG Data Analytics Virtual Internship**, I've worked on a series of projects designed to mirror real-world business challenges. The journey began with [**Project Sprocket Central Data Cleaning**](https://github.com/Susan-hue43/-Sprocket-Data-Cleaning-Project.git), where the focus was on ensuring data quality and preparing it for deeper analysis. That groundwork laid the foundation for this project, which shifts gears toward **predictive modeling and customer segmentation**.
 
-The datasets had already been cleaned, with the exception of a few `dob` null values that were intentionally retained for analysis. In this project, those nulls were dropped to ensure consistency during modeling.  
+For businesses like **Sprocket Central Pty Ltd**, customer segmentation is critical—it allows marketing efforts and resources to be directed toward the most valuable prospects, increasing efficiency and profitability. By leveraging historical purchase and demographic data, the objective here is to identify **high-value customers** from a new pool of 1,000 prospects.
+
+The datasets had already undergone cleaning, except for a few `dob` null values deliberately retained for observation. For the modeling stage, however, these nulls were removed to maintain consistency and reliability in the predictions.
 
 ---
 
@@ -29,7 +30,7 @@ The datasets had already been cleaned, with the exception of a few `dob` null va
 
 The main objective of this project is **Identifying High-Value Customers from 1,000 New Prospects** for Sprocket Central Pty Ltd.  
 
-Using predictive modeling techniques, the goal was to segment potential customers into value tiers **(High, Medium, Low)** based on their historical purchasing behavior. This helps the business prioritize marketing efforts, allocate resources efficiently, and maximize return on investment.  
+Using predictive modeling techniques, the goal is to segment potential customers into value tiers **(High, Medium, Low)** based on their historical purchasing behavior. This helps the business prioritize marketing efforts, allocate resources efficiently, and maximize return on investment.  
 
 
 ---
@@ -59,10 +60,10 @@ Using predictive modeling techniques, the goal was to segment potential customer
     ```python
     # remove null values
     customers = customers.dropna()
-    customers.isna().sum()
     ``` 
   - **Feature Engineering:**
       1. Engineered **Sales Segment** using purchase quantile cutoffs (0.33, 0.66, max).
+      
     ```python
     # create target variable
 
@@ -72,16 +73,21 @@ Using predictive modeling techniques, the goal was to segment potential customer
         customers['past_3_years_bike_related_purchases'].max()]
 
     labels = ['Low Value', 'Medium Value', 'High Value']
-
+    
     customers['sales_segment'] = pd.cut(customers['past_3_years_bike_related_purchases'], bins=bins, labels=labels, include_lowest=True)
     ```
       2. **Tenure Squared (`tenure_squared`)**- Capture potential non-linear relationships between tenure and purchase behavior.
     
-      4. **Log-Transformed Property Valuation (`log_property_valuation`)**- Normalize skewed property valuation values and reduce the effect of outliers.  
+      3. **Log-Transformed Property Valuation (`log_property_valuation`)**- Normalize skewed property valuation values and reduce the effect of outliers.  
+
       4. **Purchases per Year (`purchase_per_year`)**- Standardize purchase activity relative to customer tenure, ensuring fairness when comparing newer vs. older customers.  
+
       5. **High-Value Car Owner (`high_value_car_owner`)**- Flag customers with both car ownership and high net worth, as they may represent premium target segments. 
+
+      
       ```python
       # Tenure squared
+      customers_fe = customers.copy()
       customers_fe['tenure_squared'] = customers_fe['tenure'] ** 2
 
       # Log-transformed property valuation
@@ -120,13 +126,34 @@ These engineered features were included to improve predictive accuracy and bette
 
 ---
 
-## 🔍 Exploratory Data Analysis (EDA)  
-- Distribution of past 3-year purchases by customer.  
-- Age and gender breakdown of purchases.  
-- State-level customer concentration.  
-- Correlation of demographics with purchase frequency.  
+## Exploratory Data Analysis (EDA)  
+- Distribution of past 3-year purchases by customer.
+
+  <img width="540" height="468" alt="image" src="https://github.com/user-attachments/assets/07ebdf21-de08-4b89-bf75-5295f7368fe1" />
+
+   The past 3-year purchase distribution shows a **balanced customer base** across all segments:
+
+    * **High Value:** 948
+    * **Medium Value:** 926
+    * **Low Value:** 902
+
+   No single group dominates, indicating that customers contribute relatively evenly to overall sales, with only slight variation between segments.
+---
+- Gender breakdown of purchases.
+
+<img width="549" height="468" alt="image" src="https://github.com/user-attachments/assets/2b3efad5-8241-4c2b-9cdc-ada9cb881afc" />
+  
+  The gender distribution of purchases shows a fairly even split, with **females (1,444 purchases)** slightly outnumbering **males (1,331 purchases)**. Only **1   purchase** was recorded under the “unsure” category, indicating minimal ambiguity in gender reporting.
 
 ---
+- State-level customer concentration.
+
+<img width="549" height="468" alt="image" src="https://github.com/user-attachments/assets/c79272f2-ef2b-4852-9618-2fead5461a3b" />
+
+
+  The majority of purchases came from **New South Wales (1,484)**, making it the leading state in bike-related purchases over the past three years. **Victoria (708 purchases)** follows as the second-largest contributor, while **Queensland (584 purchases)** recorded the lowest purchase count among the three states.
+
+--- 
 
 ## Modeling Approach  
 
@@ -135,15 +162,28 @@ These engineered features were included to improve predictive accuracy and bette
 - Target variable: **Sales Segment**, defined using quartiles of past 3 years’ purchases.  
 
 ### 2. Model Development  
-- **Data Split:** Training and testing sets were prepared to evaluate generalization.  
+- **Data Split:** Training and testing sets were prepared to evaluate generalization.
+  
 - **Feature Set:** Included demographic, behavioral, and engineered features (e.g., tenure_squared, log_property_valuation, purchase_per_year, high_value_car_owner).  
+
 - **Hyperparameter Tuning:** Applied Grid search to optimize model depth, learning rate, and estimators.
+
 - **Model Training:** The engineered dataset was fitted into XGBoost for multi-class classification.
+
   - **Prediction on Validation Set:** The trained model was tested against the held-out validation set.  
+
 - **Evaluation:** Performance was assessed using:  
   - **Confusion Matrix** – to visualize misclassifications across quartile segments.  
+
   - **Classification Report** – providing precision, recall, and F1-score for each class.
+
 ```python
+# Drop unneeded columns
+drop_cols = ['customer_id', 'first_name', 'last_name', 'DOB', 'job_title', 'deceased_indicator',
+             'address', 'postcode', 'country', 'past_3_years_bike_related_purchases', 'owns_car', 'property_valuation']
+
+target = 'sales_segment'
+
 # Features and target
 X = customers_fe.drop(columns=drop_cols + [target])
 y = customers_fe[target]
@@ -221,13 +261,10 @@ plt.show()
 
 <img width="336" height="152" alt="Screenshot 2025-08-20 002207" src="https://github.com/user-attachments/assets/859b68b2-b124-4982-a5ca-65a24139a572" />
 
-
-**Interpretation:**
-
-* **High Value:** F1 = 0.99 (recall 0.99) → the model almost perfectly identifies high-value customers.
-* **Low Value:** F1 = 0.99 (recall 1.00) → predictions for low-value customers are extremely accurate.
-* **Medium Value:** F1 = 0.98 (recall 0.97) → the model is highly reliable in classifying medium-value customers.
-* **Overall Accuracy:** 99% → the model gets 99 out of 100 customers correctly classified.
+* **High Value: F1** = **0.99 (recall 0.99)** → the model almost perfectly identifies high-value customers.
+* **Low Value: F1** = **0.99 (recall 1.00)** → predictions for low-value customers are extremely accurate.
+* **Medium Value: F1** = **0.98 (recall 0.97)** → the model is highly reliable in classifying medium-value customers.
+* **Overall Accuracy: 99%** → the model gets 99 out of 100 customers correctly classified.
 
 ---
 
@@ -235,9 +272,8 @@ plt.show()
 
 <img width="596" height="453" alt="image" src="https://github.com/user-attachments/assets/fb543c03-0789-449d-b914-ec2560dccfaa" />
 
-**Interpretation:**
 * The model makes very few mistakes across all categories.
-* Almost all **High Value** customers are correctly classified, with just 1 misclassified.
+* Almost all **High Value** customers are correctly classified, with just 2 misclassified.
 * **Low Value** customers were classified perfectly, with no errors.
 * A small number of **Medium Value** customers (5 total) were misclassified, but the vast majority were correct.
 
@@ -301,9 +337,12 @@ The quantile comparison confirmed that the model’s segmentation strongly refle
 
 The model segmented the **1,000 new customers** into three value groups:
 
-* **Medium Value:** 366 customers.
-* **High Value:** 328 customers.
-* **Low Value:** 306 customers.
+* **Medium Value: 366** customers.
+* **High Value: 328** customers.
+* **Low Value: 306** customers.
+
+<img width="540" height="468" alt="image" src="https://github.com/user-attachments/assets/1e4d390d-5eba-4239-9a34-c4af59eea3f7" />
+
 
 These results show that the largest portion of customers falls into the **Medium Value** segment, followed closely by **High Value** and **Low Value** groups, with all three segments relatively balanced in distribution.
 
