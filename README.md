@@ -3,7 +3,7 @@
 ## Introduction
 As part of the **KPMG Data Analytics Virtual Internship**, I've worked on a series of projects designed to mirror real-world business challenges. The journey began with [**Project Sprocket Central Data Cleaning**](https://github.com/Susan-hue43/-Sprocket-Data-Cleaning-Project.git), where the focus was on ensuring data quality and preparing it for deeper analysis. That groundwork laid the foundation for this project, which shifts gears toward **predictive modeling and customer segmentation**.
 
-For businesses like **Sprocket Central Pty Ltd**, customer segmentation is critical—it allows marketing efforts and resources to be directed toward the most valuable prospects, increasing efficiency and profitability. By leveraging historical purchase and demographic data, the objective here is to identify **high-value customers** from a new pool of 1,000 prospects.
+For businesses like **Sprocket Central Pty Ltd**, customer segmentation is critical it allows marketing efforts and resources to be directed toward the most valuable prospects, increasing efficiency and profitability. By leveraging historical purchase and demographic data, the objective here is to identify **high-value customers** from a new pool of 1,000 prospects.
 
 The datasets had already undergone cleaning, except for a few `dob` null values deliberately retained for observation. For the modeling stage, however, these nulls were removed to maintain consistency and reliability in the predictions.
 
@@ -39,7 +39,7 @@ Using predictive modeling techniques, the goal is to segment potential customers
 - Data Cleaning & Preprocessing.  
 - Feature Engineering.  
 - Exploratory Data Analysis (EDA).  
-- Predictive Modeling (Classification with XGBoost & Random Forest.  
+- Predictive Modeling (Classification with XGBoost).  
 - Model Evaluation (Accuracy, F1-Score, Quantile Analysis).  
 - Customer Segmentation using Purchase Quantiles.  
 - Data Visualization & Business Reporting.  
@@ -309,6 +309,8 @@ final_customers.to_excel(output_path, index=False)
 print("✅ Predictions with Sales_Segment saved to", output_path)
 ```
 
+---
+
 ## Model Evaluation 
 
 | Quantile         | Training Data | New Customers |
@@ -346,29 +348,31 @@ The quantile comparison confirmed that the model’s segmentation strongly refle
 
 These results show that the largest portion of customers falls into the **Medium Value** segment, followed closely by **High Value** and **Low Value** groups, with all three segments relatively balanced in distribution.
 
+---
 
 - **Age Group:** High-value customers are concentrated in the **43–52** and **53–62** age ranges.
 
 <img width="532" height="468" alt="image" src="https://github.com/user-attachments/assets/33921a72-c3d8-4b0b-9a2d-c33456009ad6" />
 
+---
+
 - **Location:** Majority of high-value customers are based in **New South Wales (NSW)**.
   
   <img width="540" height="468" alt="image" src="https://github.com/user-attachments/assets/af87cca9-4989-43f0-844f-ac28c2d925c2" />
+
+---
 
 - **Wealth Segment:** Surprisingly, the **Mass Customer** wealth segment contributes the most to high-value purchases.
 
 <img width="571" height="453" alt="image" src="https://github.com/user-attachments/assets/3b4b4f80-7230-41d1-8c65-7c079ee25034" />
 
-
 These insights suggest that customer value is **not always tied to higher wealth brackets**. Instead, affordability and practicality drive purchases among middle-aged customers in NSW.
 
-
-
-
-
 ---
+
 ## Conclusion  
-The predictive modeling successfully segmented the new customer list in line with historical patterns. This provides Sprocket Central Pty Ltd with a reliable **customer targeting framework** to maximize ROI from marketing and sales campaigns.  
+
+The predictive model segmented the 1,000 new customers into **High, Medium, and Low Value groups**, reflecting historical purchase patterns. This enables Sprocket Central Pty Ltd to **prioritize 328 High Value customers**, nurture **366 Medium Value prospects**, and manage **306 Low Value customers** cost-effectively. The framework ensures marketing and sales efforts are **data-driven, focused, and ROI-maximizing**.
 
 ---
 
